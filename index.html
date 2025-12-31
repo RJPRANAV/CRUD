@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful User Management Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --success: #00b09b;
+            --danger: #ff416c;
+            --warning: #ff7e5f;
+            --info: #4facfe;
+            --light: #ffffff;
+            --dark: #2c3e50;
+            --gray: #7f8c8d;
+            --light-gray: #ecf0f1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #6a11cb, #2575fc, #4facfe, #00b09b, #ff7e5f);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            color: white;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            width: 100%;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 15px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+        }
+
+        .btn {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(to right, var(--danger), var(--warning));
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+        }
+
+        .btn-edit {
+            background: linear-gradient(to right, var(--warning), #f9d423);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 126, 95, 0.4);
+        }
+
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background-color: rgba(106, 17, 203, 0.05);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .success {
+            background: linear-gradient(to right, var(--success), #96c93d);
+            color: white;
+        }
+
+        .error {
+            background: linear-gradient(to right, var(--danger), #ff6b6b);
+            color: white;
+        }
+
+        .user-count {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+        }
+
+        .search-container button {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Colorful User Dashboard</h1>
+            <p class="subtitle">A vibrant CRUD application with animated background</p>
+        </header>
+
+        <div id="message" class="message"></div>
+
+        <div class="dashboard">
+            <div class="left-panel">
+                <div class="card">
+                    <div class="card-title">
+                        <span><i class="fas fa-user-plus"></i> Add New User</span>
+                    </div>
+                    <form id="userForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="Enter full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="Enter email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" placeholder="Enter phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Department</label>
+                            <select id="department" required>
+                                <option value="">Select Department</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Sales">Sales</option>
+                                <option value="HR">Human Resources</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Design">Design</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save User</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span><i class="fas fa-chart-pie"></i> Statistics</span>
+                    </div>
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalUsers">0</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="engineeringUsers">0</div>
+                            <div class="stat-label">Engineering</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="marketingUsers">0</div>
+                            <div class="stat-label">Marketing</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="salesUsers">0</div>
+                            <div class="stat-label">Sales</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="card">
+                    <div class="card-title">
+                        <span><i class="fas fa-users"></i> User List</span>
+                        <span id="userCount" class="user-count">0 Users</span>
+                    </div>
+
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search users...">
+                        <button class="btn btn-primary" onclick="searchUsers()"><i class="fas fa-search"></i> Search</button>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table id="userTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Department</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Vibrant CRUD Application with Animated Background &copy; 2023</p>
+        </footer>
+    </div>
+
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
+            <p>Are you sure you want to delete user: <span id="deleteUserName" style="font-weight: bold;"></span>?</p>
+            <p>This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmDelete()"><i class="fas fa-trash"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-btn" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        const userForm = document.getElementById('userForm');
+        const userTable = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+        const messageDiv = document.getElementById('message');
+        const userCount = document.getElementById('userCount');
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteUserName = document.getElementById('deleteUserName');
+        const searchInput = document.getElementById('searchInput');
+
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let currentEditId = null;
+        let deleteUserId = null;
+
+        function init() {
+            renderUsers();
+            updateUserCount();
+            updateStats();
+            createParticles();
+            
+            userForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const department = document.getElementById('department').value;
+                
+                if (currentEditId === null) {
+                    const newUser = {
+                        id: Date.now(),
+                        name,
+                        email,
+                        phone,
+                        department
+                    };
+                    users.push(newUser);
+                    showMessage('User added successfully!', 'success');
+                } else {
+                    const index = users.findIndex(user => user.id === currentEditId);
+                    if (index !== -1) {
+                        users[index] = { ...users[index], name, email, phone, department };
+                        showMessage('User updated successfully!', 'success');
+                    }
+                    userForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Add User';
+                    currentEditId = null;
+                }
+                
+                saveUsers();
+                renderUsers();
+                updateUserCount();
+                updateStats();
+                userForm.reset();
+            });
+
+            searchInput.addEventListener('keyup', function() {
+                searchUsers();
+            });
+        }
+
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const colors = ['#6a11cb', '#2575fc', '#4facfe', '#00b09b', '#ff7e5f'];
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 30 + 10;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = color;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        function renderUsers(userList = users) {
+            userTable.innerHTML = '';
+            
+            if (userList.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td colspan="5" style="text-align: center;">No users found. Please add some users.</td>`;
+                userTable.appendChild(tr);
+                return;
+            }
+            
+            userList.forEach(user => {
+                const tr = document.createElement('tr');
+                tr.className = 'fade-in';
+                tr.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.department}</td>
+                    <td class="actions">
+                        <button class="btn btn-edit btn-sm" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="showDeleteModal(${user.id}, '${user.name}')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                `;
+                userTable.appendChild(tr);
+            });
+        }
+
+    
+        function editUser(id) {
+            const user = users.find(user => user.id === id);
+            if (user) {
+                document.getElementById('name').value = user.name;
+                document.getElementById('email').value = user.email;
+                document.getElementById('phone').value = user.phone;
+                document.getElementById('department').value = user.department;
+                
+                currentEditId = user.id;
+                userForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Update User';
+                
+                userForm.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+    
+        function showDeleteModal(id, name) {
+            deleteUserId = id;
+            deleteUserName.textContent = name;
+            deleteModal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            deleteModal.style.display = 'none';
+            deleteUserId = null;
+        }
+
+        function confirmDelete() {
+            if (deleteUserId) {
+                users = users.filter(user => user.id !== deleteUserId);
+                saveUsers();
+                renderUsers();
+                updateUserCount();
+                updateStats();
+                showMessage('User deleted successfully!', 'success');
+                closeModal();
+                
+                if (currentEditId === deleteUserId) {
+                    userForm.reset();
+                    userForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-save"></i> Add User';
+                    currentEditId = null;
+                }
+            }
+        }
+
+    
+        function searchUsers() {
+            const searchTerm = searchInput.value.toLowerCase();
+            if (searchTerm === '') {
+                renderUsers(users);
+                return;
+            }
+            
+            const filteredUsers = users.filter(user => 
+                user.name.toLowerCase().includes(searchTerm) ||
+                user.email.toLowerCase().includes(searchTerm) ||
+                user.phone.includes(searchTerm) ||
+                user.department.toLowerCase().includes(searchTerm)
+            );
+            
+            renderUsers(filteredUsers);
+        }
+
+        function saveUsers() {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        function updateUserCount() {
+            userCount.textContent = `${users.length} User${users.length !== 1 ? 's' : ''}`;
+            document.getElementById('totalUsers').textContent = users.length;
+        }
+
+        function updateStats() {
+            document.getElementById('engineeringUsers').textContent = 
+                users.filter(user => user.department === 'Engineering').length;
+                
+            document.getElementById('marketingUsers').textContent = 
+                users.filter(user => user.department === 'Marketing').length;
+                
+            document.getElementById('salesUsers').textContent = 
+                users.filter(user => user.department === 'Sales').length;
+        }
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+
+        window.addEventListener('click', function(event) {
+            if (event.target === deleteModal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
